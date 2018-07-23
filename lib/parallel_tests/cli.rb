@@ -12,7 +12,9 @@ module ParallelTests
 
       ENV['DISABLE_SPRING'] ||= '1'
 
-      num_processes = ParallelTests.determine_number_of_processes(options[:count])
+      processes_count = options[:count] + (options[:single_process] || '').split('|').count
+
+      num_processes = ParallelTests.determine_number_of_processes(processes_count)
       num_processes = num_processes * (options[:multiply] || 1)
 
       options[:first_is_1] ||= first_is_1?
@@ -23,7 +25,7 @@ module ParallelTests
         run_tests_in_parallel(num_processes, options)
       end
     end
-
+    
     private
 
     def handle_interrupt
